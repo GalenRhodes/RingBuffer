@@ -1,3 +1,3 @@
 # RingBuffer
 
-A description of this package.
+A ring buffer written in C.
