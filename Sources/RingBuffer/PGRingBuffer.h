@@ -14,21 +14,26 @@
 #include <unistd.h>
 #include <stddef.h>
 #include <string.h>
+#include <stdbool.h>
 
 __BEGIN_DECLS
 
+typedef uint8_t PGByte;
+typedef PGByte  *PGByteP;
+
 typedef struct _st_pg_ringbuffer_ {
+    long    initSize;
     long    size;
     long    head;
     long    tail;
-    uint8_t *buffer;
-} PGRingBuffer;
+    PGByteP buffer;
+}               PGRingBuffer;
 
-typedef char PGBool;
+typedef bool PGBool;
 
 #define PG_EXPORT extern __attribute__((__visibility__("default")))
-#define PG_TRUE   ((PGBool)(1))
-#define PG_FALSE  ((PGBool)(0))
+#define PG_TRUE   (true)
+#define PG_FALSE  (false)
 
 /**
  * Creates and initializes a new ring buffer.
@@ -96,7 +101,7 @@ PG_EXPORT PGBool PGAppendToRingBuffer(PGRingBuffer *buff, const void *src, long 
  * @return `true` if successful or `false` if there was not
  *         enough capacity and there was not enough memory to resize the buffer.
  */
-PG_EXPORT PGBool PGAppendByteToRingBuffer(PGRingBuffer *buff, uint8_t byte);
+PG_EXPORT PGBool PGAppendByteToRingBuffer(PGRingBuffer *buff, PGByte byte);
 
 /**
  * Prepends the given bytes to the beginning of the ring buffer - resizing the buffer if needed.
@@ -117,7 +122,17 @@ PG_EXPORT PGBool PGPrependToRingBuffer(PGRingBuffer *buff, const void *src, long
  * @return `true` if successful or `false` if there was not
  *         enough capacity and there was not enough memory to resize the buffer.
  */
-PG_EXPORT PGBool PGPrependByteToRingBuffer(PGRingBuffer *buff, uint8_t byte);
+PG_EXPORT PGBool PGPrependByteToRingBuffer(PGRingBuffer *buff, PGByte byte);
+
+/**
+ * Clears the buffer.
+ *
+ * @param buff the buffer.
+ * @param keepCapacity if true then the capacity is maintained. If false then
+ *                     the buffer is shrunk back to it's initial size.
+ * @return true if successful, false if th buffer could not be resized.
+ */
+PG_EXPORT PGBool PGClearRingBuffer(PGRingBuffer *buff, PGBool keepCapacity);
 
 /**
  * While treating the ring buffer as a series of 16-bit words, this function

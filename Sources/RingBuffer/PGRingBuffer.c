@@ -55,7 +55,7 @@ PG_ALWAYS_INLINE long _PGSwapRingBufferEndian(PGRingBuffer *buff, long bytesPerW
 
     if(ws) {
         long    length = (ws * bytesPerWord);
-        uint8_t *words = malloc((size_t)length);
+        PGByteP words  = malloc((size_t)length);
         PGReadFromRingBuffer(buff, words, length);
         func(words, length, alt);
         PGPrependToRingBuffer(buff, words, length);
@@ -80,7 +80,7 @@ PG_ALWAYS_INLINE long pgDecHead(PGRingBuffer *buff, long length) {
     return (buff->head = (((buff->head < length) ? (buff->size + buff->head) : buff->head) - length));
 }
 
-PG_ALWAYS_INLINE long pgRead(PGRingBuffer *buff, uint8_t *dest, long d) {
+PG_ALWAYS_INLINE long pgRead(PGRingBuffer *buff, PGByteP dest, long d) {
     PGMemCpy(dest, (buff->buffer + buff->head), d);
     pgIncHead(buff, d);
     return d;
@@ -92,18 +92,18 @@ PG_ALWAYS_INLINE long getNewBufferSize(const PGRingBuffer *buff, long needed, lo
     return nsize;
 }
 
-PG_ALWAYS_INLINE void defrag3(PGRingBuffer *buff, uint8_t *nb, long otail, long osize) {
+PG_ALWAYS_INLINE void defrag3(PGRingBuffer *buff, PGByteP nb, long otail, long osize) {
     PGMemMove((nb + osize), nb, otail);
     buff->tail += osize;
 }
 
-PG_ALWAYS_INLINE void defrag2(PGRingBuffer *buff, uint8_t *nb, long ohead, long nsize, long hsz) {
+PG_ALWAYS_INLINE void defrag2(PGRingBuffer *buff, PGByteP nb, long ohead, long nsize, long hsz) {
     long nhead = (nsize - hsz);
     PGMemMove((nb + nhead), (nb + ohead), hsz);
     buff->head = nhead;
 }
 
-PG_ALWAYS_INLINE void defrag1(PGRingBuffer *buff, uint8_t *nb, long ohead, long otail, long osize, long nsize, long hsz) {
+PG_ALWAYS_INLINE void defrag1(PGRingBuffer *buff, PGByteP nb, long ohead, long otail, long osize, long nsize, long hsz) {
     if(hsz > otail) defrag3(buff, nb, otail, osize); // Defrag by moving the tail.
     else defrag2(buff, nb, ohead, nsize, hsz); // Defrag by moving the head.
 }
@@ -138,7 +138,7 @@ long PGSwapRingBufferEndian64AltAlt(PGRingBuffer *buff) {
 
 PGBool resizeBuffer(PGRingBuffer *buff, long needed, long osize, long ohead, long otail) {
     long    nsize = getNewBufferSize(buff, needed, osize);
-    uint8_t *nb   = realloc(buff->buffer, (size_t)nsize);
+    PGByteP nb    = realloc(buff->buffer, (size_t)nsize);
 
     if(nb) {
         buff->buffer = nb;
@@ -153,10 +153,11 @@ PGBool resizeBuffer(PGRingBuffer *buff, long needed, long osize, long ohead, lon
 PGRingBuffer *PGCreateRingBuffer(long initialSize) {
     PGRingBuffer *buff = malloc(sizeof(PGRingBuffer));
     if(buff) {
-        buff->size   = pg_Min(initialSize, 5);
-        buff->head   = 0;
-        buff->tail   = 0;
-        buff->buffer = malloc((size_t)buff->size);
+        buff->initSize = pg_Min(initialSize, 5);
+        buff->size     = buff->initSize;
+        buff->head     = 0;
+        buff->tail     = 0;
+        buff->buffer   = malloc((size_t)buff->size);
         if(buff->buffer) return buff;
         free(buff);
         buff = NULL;
@@ -212,7 +213,7 @@ PGBool PGAppendToRingBuffer(PGRingBuffer *buff, const void *src, long length) {
     return PG_TRUE;
 }
 
-PGBool PGAppendByteToRingBuffer(PGRingBuffer *buff, uint8_t byte) {
+PGBool PGAppendByteToRingBuffer(PGRingBuffer *buff, PGByte byte) {
     if(PGEnsureCapacity(buff, 1)) {
         buff->buffer[buff->tail] = byte;
         pgIncTail(buff, 1);
@@ -242,7 +243,7 @@ PGBool PGPrependToRingBuffer(PGRingBuffer *buff, const void *src, long length) {
     return PG_TRUE;
 }
 
-PGBool PGPrependByteToRingBuffer(PGRingBuffer *buff, uint8_t byte) {
+PGBool PGPrependByteToRingBuffer(PGRingBuffer *buff, PGByte byte) {
     if(PGEnsureCapacity(buff, 1)) {
         buff->buffer[pgDecHead(buff, 1)] = byte;
         return PG_TRUE;
@@ -295,6 +296,21 @@ long PGPeekFromRingBuffer(PGRingBuffer *buff, void *dest, long maxLength) {
     buff->head = head;
     buff->tail = tail;
     return cc;
+}
+
+PGBool PGClearRingBuffer(PGRingBuffer *buff, PGBool keepCapacity) {
+    buff->head = 0;
+    buff->tail = 0;
+
+    if(!keepCapacity) {
+        PGByteP b = realloc(buff->buffer, (size_t)buff->initSize);
+        if(b) {
+            buff->buffer = b;
+            buff->size = buff->initSize;
+        }
+        else return PG_FALSE;
+    }
+    return PG_TRUE;
 }
 
 long PGMemCpy(void *dst, const void *src, long length) {
