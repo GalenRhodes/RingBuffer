@@ -187,7 +187,7 @@ long PGReadFromRingBuffer(PGRingBuffer *buff, void *dest, long maxLength) {
 }
 
 PGBool PGEnsureCapacity(PGRingBuffer *buff, long needed) {
-    return (((needed > 0) && (PGRingBufferRemaining(buff) < needed)) ? resizeBuffer(buff, needed, buff->size, buff->head, buff->tail) : PG_TRUE);
+    return (PGBool)(((needed > 0) && (PGRingBufferRemaining(buff) < needed)) ? resizeBuffer(buff, needed, buff->size, buff->head, buff->tail) : PG_TRUE);
 }
 
 PGBool PGAppendToRingBuffer(PGRingBuffer *buff, const void *src, long length) {
