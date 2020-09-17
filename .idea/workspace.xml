@@ -23,7 +23,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f6c2b5c8-4de6-4191-8315-36f807849231" name="Default Changelist" comment="Added PGClearRingBuffer.">
-      <change beforePath="$PROJECT_DIR$/Sources/RingBuffer/PGRingBuffer.c" beforeDir="false" afterPath="$PROJECT_DIR$/Sources/RingBuffer/PGRingBuffer.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sources/RingBuffer/PGRingBuffer.h" beforeDir="false" afterPath="$PROJECT_DIR$/Sources/RingBuffer/PGRingBuffer.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -84,7 +85,8 @@
       <option name="presentableId" value="Default" />
       <updated>1599747106694</updated>
       <workItem from="1599747107857" duration="513000" />
-      <workItem from="1600027274156" duration="1194000" />
+      <workItem from="1600027274156" duration="1303000" />
+      <workItem from="1600301135794" duration="140000" />
     </task>
     <task id="LOCAL-00001" summary="Added Xcode Project Files">
       <created>1599747283708</created>
@@ -100,7 +102,21 @@
       <option name="project" value="LOCAL" />
       <updated>1600028349530</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Added PGClearRingBuffer.">
+      <created>1600028517042</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1600028517042</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Added PGClearRingBuffer.">
+      <created>1600028525595</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1600028525595</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -124,9 +140,10 @@
     <option name="LAST_COMMIT_MESSAGE" value="Added PGClearRingBuffer." />
   </component>
   <component name="WindowStateProjectService">
-    <state x="880" y="276" key="Vcs.Push.Dialog.v2" timestamp="1599747304660">
-      <screen x="0" y="0" width="2560" height="1080" />
+    <state x="578" y="268" key="Vcs.Push.Dialog.v2" timestamp="1600028563021">
+      <screen x="0" y="0" width="1680" height="1050" />
     </state>
+    <state x="578" y="268" key="Vcs.Push.Dialog.v2/0.0.1680.1050@0.0.1680.1050" timestamp="1600028563021" />
     <state x="880" y="276" key="Vcs.Push.Dialog.v2/0.0.2560.1080@0.0.2560.1080" timestamp="1599747304660" />
     <state x="546" y="258" width="813" height="690" key="find.popup" timestamp="1600027988499">
       <screen x="0" y="0" width="1680" height="1050" />
