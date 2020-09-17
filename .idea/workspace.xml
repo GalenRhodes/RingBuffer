@@ -22,9 +22,8 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f6c2b5c8-4de6-4191-8315-36f807849231" name="Default Changelist" comment="Fix imports for Linux.">
+    <list default="true" id="f6c2b5c8-4de6-4191-8315-36f807849231" name="Default Changelist" comment="Removed unnecessary typedef and macros.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Package.swift" beforeDir="false" afterPath="$PROJECT_DIR$/Package.swift" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Sources/RingBuffer/PGRingBuffer.c" beforeDir="false" afterPath="$PROJECT_DIR$/Sources/RingBuffer/PGRingBuffer.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Sources/RingBuffer/PGRingBuffer.h" beforeDir="false" afterPath="$PROJECT_DIR$/Sources/RingBuffer/PGRingBuffer.h" afterDir="false" />
     </list>
@@ -96,7 +95,8 @@
       <workItem from="1599747107857" duration="513000" />
       <workItem from="1600027274156" duration="1303000" />
       <workItem from="1600301135794" duration="715000" />
-      <workItem from="1600351491474" duration="371000" />
+      <workItem from="1600351491474" duration="594000" />
+      <workItem from="1600368855319" duration="345000" />
     </task>
     <task id="LOCAL-00001" summary="Added Xcode Project Files">
       <created>1599747283708</created>
@@ -133,7 +133,14 @@
       <option name="project" value="LOCAL" />
       <updated>1600301319323</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Removed unnecessary typedef and macros.">
+      <created>1600351943474</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1600351943474</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -155,14 +162,15 @@
     <MESSAGE value="Added Xcode Project Files" />
     <MESSAGE value="Added PGClearRingBuffer." />
     <MESSAGE value="Fix imports for Linux." />
-    <option name="LAST_COMMIT_MESSAGE" value="Fix imports for Linux." />
+    <MESSAGE value="Removed unnecessary typedef and macros." />
+    <option name="LAST_COMMIT_MESSAGE" value="Removed unnecessary typedef and macros." />
   </component>
   <component name="WindowStateProjectService">
-    <state x="578" y="268" key="Vcs.Push.Dialog.v2" timestamp="1600301358636">
-      <screen x="0" y="0" width="1680" height="1050" />
+    <state x="880" y="276" key="Vcs.Push.Dialog.v2" timestamp="1600351979335">
+      <screen x="0" y="0" width="2560" height="1080" />
     </state>
     <state x="578" y="268" key="Vcs.Push.Dialog.v2/0.0.1680.1050@0.0.1680.1050" timestamp="1600301358636" />
-    <state x="880" y="276" key="Vcs.Push.Dialog.v2/0.0.2560.1080@0.0.2560.1080" timestamp="1599747304660" />
+    <state x="880" y="276" key="Vcs.Push.Dialog.v2/0.0.2560.1080@0.0.2560.1080" timestamp="1600351979335" />
     <state x="832" y="265" width="1239" height="710" key="find.popup" timestamp="1600351847668">
       <screen x="0" y="0" width="2560" height="1080" />
     </state>

@@ -346,3 +346,7 @@ void PGSwap64Alt(void *buffer, long length) {
 void PGSwap64AltAlt(void *buffer, long length) {
     _PGSwap64(buffer, length, 2);
 }
+
+long PGHostByteOrder(void) { return __BYTE_ORDER__; }
+long PGLittleEndianByteOrder(void) { return __ORDER_LITTLE_ENDIAN__; }
+long PGBigEndianByteOrder(void) { return __ORDER_BIG_ENDIAN__; }

@@ -32,6 +32,12 @@ typedef struct _st_pg_ringbuffer_ {
 
 #define PG_EXPORT extern __attribute__((__visibility__("default")))
 
+PG_EXPORT long PGHostByteOrder(void);
+
+PG_EXPORT long PGLittleEndianByteOrder(void);
+
+PG_EXPORT long PGBigEndianByteOrder(void);
+
 /**
  * Creates and initializes a new ring buffer.
  *
