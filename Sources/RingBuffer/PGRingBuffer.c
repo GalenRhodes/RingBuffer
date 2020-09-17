@@ -136,7 +136,7 @@ long PGSwapRingBufferEndian64AltAlt(PGRingBuffer *buff) {
     return _PGSwapRingBufferEndian(buff, 8, _PGSwap64, 2);
 }
 
-PGBool resizeBuffer(PGRingBuffer *buff, long needed, long osize, long ohead, long otail) {
+bool resizeBuffer(PGRingBuffer *buff, long needed, long osize, long ohead, long otail) {
     long    nsize = getNewBufferSize(buff, needed, osize);
     PGByteP nb    = realloc(buff->buffer, (size_t)nsize);
 
@@ -144,10 +144,10 @@ PGBool resizeBuffer(PGRingBuffer *buff, long needed, long osize, long ohead, lon
         buff->buffer = nb;
         buff->size   = nsize;
         defragBuffer(buff, nsize, osize, ohead, otail);
-        return PG_TRUE;
+        return true;
     }
 
-    return PG_FALSE;
+    return false;
 }
 
 PGRingBuffer *PGCreateRingBuffer(long initialSize) {
@@ -186,11 +186,11 @@ long PGReadFromRingBuffer(PGRingBuffer *buff, void *dest, long maxLength) {
     return 0;
 }
 
-PGBool PGEnsureCapacity(PGRingBuffer *buff, long needed) {
-    return (PGBool)(((needed > 0) && (PGRingBufferRemaining(buff) < needed)) ? resizeBuffer(buff, needed, buff->size, buff->head, buff->tail) : PG_TRUE);
+bool PGEnsureCapacity(PGRingBuffer *buff, long needed) {
+    return (bool)(((needed > 0) && (PGRingBufferRemaining(buff) < needed)) ? resizeBuffer(buff, needed, buff->size, buff->head, buff->tail) : true);
 }
 
-PGBool PGAppendToRingBuffer(PGRingBuffer *buff, const void *src, long length) {
+bool PGAppendToRingBuffer(PGRingBuffer *buff, const void *src, long length) {
     if(src && length > 0) {
         if(PGEnsureCapacity(buff, length)) {
             if((buff->tail < buff->head)) {
@@ -204,25 +204,25 @@ PGBool PGAppendToRingBuffer(PGRingBuffer *buff, const void *src, long length) {
                 return PGAppendToRingBuffer(buff, (src + l), (length - l));
             }
 
-            return PG_TRUE;
+            return true;
         }
 
-        return PG_FALSE;
+        return false;
     }
 
-    return PG_TRUE;
+    return true;
 }
 
-PGBool PGAppendByteToRingBuffer(PGRingBuffer *buff, PGByte byte) {
+bool PGAppendByteToRingBuffer(PGRingBuffer *buff, PGByte byte) {
     if(PGEnsureCapacity(buff, 1)) {
         buff->buffer[buff->tail] = byte;
         pgIncTail(buff, 1);
-        return PG_TRUE;
+        return true;
     }
-    return PG_FALSE;
+    return false;
 }
 
-PGBool PGPrependToRingBuffer(PGRingBuffer *buff, const void *src, long length) {
+bool PGPrependToRingBuffer(PGRingBuffer *buff, const void *src, long length) {
     if(src && length > 0) {
         if(PGEnsureCapacity(buff, length)) {
             long ohead = buff->head;
@@ -236,19 +236,19 @@ PGBool PGPrependToRingBuffer(PGRingBuffer *buff, const void *src, long length) {
                 PGMemCpy((buff->buffer + buff->head), src, l);
                 PGMemCpy(buff->buffer, (src + l), (length - l));
             }
-            return PG_TRUE;
+            return true;
         }
-        return PG_FALSE;
+        return false;
     }
-    return PG_TRUE;
+    return true;
 }
 
-PGBool PGPrependByteToRingBuffer(PGRingBuffer *buff, PGByte byte) {
+bool PGPrependByteToRingBuffer(PGRingBuffer *buff, PGByte byte) {
     if(PGEnsureCapacity(buff, 1)) {
         buff->buffer[pgDecHead(buff, 1)] = byte;
-        return PG_TRUE;
+        return true;
     }
-    return PG_FALSE;
+    return false;
 }
 
 /**
@@ -298,7 +298,7 @@ long PGPeekFromRingBuffer(PGRingBuffer *buff, void *dest, long maxLength) {
     return cc;
 }
 
-PGBool PGClearRingBuffer(PGRingBuffer *buff, PGBool keepCapacity) {
+bool PGClearRingBuffer(PGRingBuffer *buff, bool keepCapacity) {
     buff->head = 0;
     buff->tail = 0;
 
@@ -308,9 +308,9 @@ PGBool PGClearRingBuffer(PGRingBuffer *buff, PGBool keepCapacity) {
             buff->buffer = b;
             buff->size = buff->initSize;
         }
-        else return PG_FALSE;
+        else return false;
     }
-    return PG_TRUE;
+    return true;
 }
 
 long PGMemCpy(void *dst, const void *src, long length) {

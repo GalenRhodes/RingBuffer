@@ -30,11 +30,7 @@ typedef struct _st_pg_ringbuffer_ {
     PGByteP buffer;
 }               PGRingBuffer;
 
-typedef bool PGBool;
-
 #define PG_EXPORT extern __attribute__((__visibility__("default")))
-#define PG_TRUE   (true)
-#define PG_FALSE  (false)
 
 /**
  * Creates and initializes a new ring buffer.
@@ -81,7 +77,7 @@ PG_EXPORT long PGPeekFromRingBuffer(PGRingBuffer *buff, void *dest, long maxLeng
  * @return `true` if there is enough room or the resize was successful. `false` if there was not
  *         enough capacity and there was not enough memory to resize the buffer.
  */
-PG_EXPORT PGBool PGEnsureCapacity(PGRingBuffer *buff, long needed);
+PG_EXPORT bool PGEnsureCapacity(PGRingBuffer *buff, long needed);
 
 /**
  * Append the given bytes to the end of the ring buffer - resizing the buffer if needed.
@@ -92,7 +88,7 @@ PG_EXPORT PGBool PGEnsureCapacity(PGRingBuffer *buff, long needed);
  * @return the number of bytes appended. If less than length then there was not
  *         enough capacity and there was not enough memory to resize the buffer.
  */
-PG_EXPORT PGBool PGAppendToRingBuffer(PGRingBuffer *buff, const void *src, long length);
+PG_EXPORT bool PGAppendToRingBuffer(PGRingBuffer *buff, const void *src, long length);
 
 /**
  * Append a single byte to the end of the ring buffer - resizing the buffer if needed.
@@ -102,7 +98,7 @@ PG_EXPORT PGBool PGAppendToRingBuffer(PGRingBuffer *buff, const void *src, long 
  * @return `true` if successful or `false` if there was not
  *         enough capacity and there was not enough memory to resize the buffer.
  */
-PG_EXPORT PGBool PGAppendByteToRingBuffer(PGRingBuffer *buff, PGByte byte);
+PG_EXPORT bool PGAppendByteToRingBuffer(PGRingBuffer *buff, PGByte byte);
 
 /**
  * Prepends the given bytes to the beginning of the ring buffer - resizing the buffer if needed.
@@ -113,7 +109,7 @@ PG_EXPORT PGBool PGAppendByteToRingBuffer(PGRingBuffer *buff, PGByte byte);
  * @return the number of bytes prepended. If less than length then there was not
  *         enough capacity and there was not enough memory to resize the buffer.
  */
-PG_EXPORT PGBool PGPrependToRingBuffer(PGRingBuffer *buff, const void *src, long length);
+PG_EXPORT bool PGPrependToRingBuffer(PGRingBuffer *buff, const void *src, long length);
 
 /**
  * Prepend a single byte to the end of the ring buffer - resizing the buffer if needed.
@@ -123,7 +119,7 @@ PG_EXPORT PGBool PGPrependToRingBuffer(PGRingBuffer *buff, const void *src, long
  * @return `true` if successful or `false` if there was not
  *         enough capacity and there was not enough memory to resize the buffer.
  */
-PG_EXPORT PGBool PGPrependByteToRingBuffer(PGRingBuffer *buff, PGByte byte);
+PG_EXPORT bool PGPrependByteToRingBuffer(PGRingBuffer *buff, PGByte byte);
 
 /**
  * Clears the buffer.
@@ -133,7 +129,7 @@ PG_EXPORT PGBool PGPrependByteToRingBuffer(PGRingBuffer *buff, PGByte byte);
  *                     the buffer is shrunk back to it's initial size.
  * @return true if successful, false if th buffer could not be resized.
  */
-PG_EXPORT PGBool PGClearRingBuffer(PGRingBuffer *buff, PGBool keepCapacity);
+PG_EXPORT bool PGClearRingBuffer(PGRingBuffer *buff, bool keepCapacity);
 
 /**
  * While treating the ring buffer as a series of 16-bit words, this function
