@@ -3,4 +3,4 @@
 
 import PackageDescription
 
-let package = Package(name: "RingBuffer", products: [ .library(name: "RingBuffer", targets: [ "RingBuffer" ]) ], targets: [ .target(name: "RingBuffer", dependencies: [], publicHeadersPath: ".") ])
+let package = Package(name: "RingBuffer", products: [ .library(name: "RingBuffer", targets: [ "RingBuffer" ]) ], targets: [ .target(name: "RingBuffer", dependencies: []) ])

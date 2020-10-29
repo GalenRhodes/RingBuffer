@@ -7,16 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1117D2375EDEF6E2FCE49C54 /* PGRingBuffer.h in Headers */ = {isa = PBXBuildFile; fileRef = 1117DCB5F253A306CFDBADC4 /* PGRingBuffer.h */; };
 		8304A538250A678C00836E49 /* PGRingBuffer.c in Sources */ = {isa = PBXBuildFile; fileRef = 8304A535250A674900836E49 /* PGRingBuffer.c */; };
-		8304A539250A678C00836E49 /* PGRingBuffer.h in Headers */ = {isa = PBXBuildFile; fileRef = 8304A536250A674900836E49 /* PGRingBuffer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1117DCB5F253A306CFDBADC4 /* PGRingBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGRingBuffer.h; sourceTree = "<group>"; };
 		8304A52A250A667D00836E49 /* libRingBuffer.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libRingBuffer.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 		8304A531250A674900836E49 /* Package.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = Package.swift; sourceTree = "<group>"; };
 		8304A532250A674900836E49 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; lineEnding = 0; path = README.md; sourceTree = "<group>"; };
 		8304A535250A674900836E49 /* PGRingBuffer.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; lineEnding = 0; path = PGRingBuffer.c; sourceTree = "<group>"; };
-		8304A536250A674900836E49 /* PGRingBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = PGRingBuffer.h; sourceTree = "<group>"; };
 		8304A537250A674900836E49 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; lineEnding = 0; path = LICENSE; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -31,6 +31,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1117DB857500A80E6DF1531E /* include */ = {
+			isa = PBXGroup;
+			children = (
+				1117DCB5F253A306CFDBADC4 /* PGRingBuffer.h */,
+			);
+			path = include;
+			sourceTree = "<group>";
+		};
 		8304A521250A667D00836E49 = {
 			isa = PBXGroup;
 			children = (
@@ -62,7 +70,7 @@
 			isa = PBXGroup;
 			children = (
 				8304A535250A674900836E49 /* PGRingBuffer.c */,
-				8304A536250A674900836E49 /* PGRingBuffer.h */,
+				1117DB857500A80E6DF1531E /* include */,
 			);
 			path = RingBuffer;
 			sourceTree = "<group>";
@@ -74,7 +82,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8304A539250A678C00836E49 /* PGRingBuffer.h in Headers */,
+				1117D2375EDEF6E2FCE49C54 /* PGRingBuffer.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

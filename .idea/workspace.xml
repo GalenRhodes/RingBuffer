@@ -22,10 +22,11 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f6c2b5c8-4de6-4191-8315-36f807849231" name="Default Changelist" comment="Removed unnecessary typedef and macros.">
+    <list default="true" id="f6c2b5c8-4de6-4191-8315-36f807849231" name="Default Changelist" comment="Byte order madness.">
+      <change beforePath="$PROJECT_DIR$/.idea/RingBuffer.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/RingBuffer.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Sources/RingBuffer/PGRingBuffer.c" beforeDir="false" afterPath="$PROJECT_DIR$/Sources/RingBuffer/PGRingBuffer.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Sources/RingBuffer/PGRingBuffer.h" beforeDir="false" afterPath="$PROJECT_DIR$/Sources/RingBuffer/PGRingBuffer.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Package.swift" beforeDir="false" afterPath="$PROJECT_DIR$/Package.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sources/RingBuffer/PGRingBuffer.h" beforeDir="false" afterPath="$PROJECT_DIR$/Sources/RingBuffer/include/PGRingBuffer.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -83,6 +84,11 @@
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
     </configuration>
+    <configuration default="true" type="Application" factoryName="Application">
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -96,7 +102,11 @@
       <workItem from="1600027274156" duration="1303000" />
       <workItem from="1600301135794" duration="715000" />
       <workItem from="1600351491474" duration="594000" />
-      <workItem from="1600368855319" duration="345000" />
+      <workItem from="1600368855319" duration="443000" />
+      <workItem from="1603023805868" duration="323000" />
+      <workItem from="1603197184278" duration="33000" />
+      <workItem from="1603957917921" duration="143000" />
+      <workItem from="1603962265351" duration="77000" />
     </task>
     <task id="LOCAL-00001" summary="Added Xcode Project Files">
       <created>1599747283708</created>
@@ -140,7 +150,14 @@
       <option name="project" value="LOCAL" />
       <updated>1600351943474</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Byte order madness.">
+      <created>1600369233226</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1600369233226</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -163,14 +180,15 @@
     <MESSAGE value="Added PGClearRingBuffer." />
     <MESSAGE value="Fix imports for Linux." />
     <MESSAGE value="Removed unnecessary typedef and macros." />
-    <option name="LAST_COMMIT_MESSAGE" value="Removed unnecessary typedef and macros." />
+    <MESSAGE value="Byte order madness." />
+    <option name="LAST_COMMIT_MESSAGE" value="Byte order madness." />
   </component>
   <component name="WindowStateProjectService">
-    <state x="880" y="276" key="Vcs.Push.Dialog.v2" timestamp="1600351979335">
+    <state x="880" y="276" key="Vcs.Push.Dialog.v2" timestamp="1600369257110">
       <screen x="0" y="0" width="2560" height="1080" />
     </state>
     <state x="578" y="268" key="Vcs.Push.Dialog.v2/0.0.1680.1050@0.0.1680.1050" timestamp="1600301358636" />
-    <state x="880" y="276" key="Vcs.Push.Dialog.v2/0.0.2560.1080@0.0.2560.1080" timestamp="1600351979335" />
+    <state x="880" y="276" key="Vcs.Push.Dialog.v2/0.0.2560.1080@0.0.2560.1080" timestamp="1600369257110" />
     <state x="832" y="265" width="1239" height="710" key="find.popup" timestamp="1600351847668">
       <screen x="0" y="0" width="2560" height="1080" />
     </state>
