@@ -6,11 +6,16 @@
 //  Copyright © 2020 Project Galen. All rights reserved.
 //
 
-#include "PGRingBuffer.h"
+#include "include/PGRingBuffer.h"
 
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "OCUnusedGlobalDeclarationInspection"
 #define PG_ALWAYS_INLINE __attribute__((__always_inline__))
 
 typedef void (*PGFunc)(void *, long, int);
+
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunused-parameter"
 
 void _PGSwap16(void *words, long length, int alt) {
     long ws = (length / 2);
@@ -23,6 +28,8 @@ void _PGSwap16(void *words, long length, int alt) {
         }
     }
 }
+
+#pragma clang diagnostic pop
 
 void _PGSwap32(void *words, long length, int alt) {
     long ws = (length / 4);
@@ -55,7 +62,7 @@ PG_ALWAYS_INLINE long _PGSwapRingBufferEndian(PGRingBuffer *buff, long bytesPerW
 
     if(ws) {
         long    length = (ws * bytesPerWord);
-        PGByteP words  = malloc((size_t)length);
+        uint8_t *words  = malloc((size_t)length);
         PGReadFromRingBuffer(buff, words, length);
         func(words, length, alt);
         PGPrependToRingBuffer(buff, words, length);
@@ -80,7 +87,7 @@ PG_ALWAYS_INLINE long pgDecHead(PGRingBuffer *buff, long length) {
     return (buff->head = (((buff->head < length) ? (buff->size + buff->head) : buff->head) - length));
 }
 
-PG_ALWAYS_INLINE long pgRead(PGRingBuffer *buff, PGByteP dest, long d) {
+PG_ALWAYS_INLINE long pgRead(PGRingBuffer *buff, uint8_t *dest, long d) {
     PGMemCpy(dest, (buff->buffer + buff->head), d);
     pgIncHead(buff, d);
     return d;
@@ -92,18 +99,18 @@ PG_ALWAYS_INLINE long getNewBufferSize(const PGRingBuffer *buff, long needed, lo
     return nsize;
 }
 
-PG_ALWAYS_INLINE void defrag3(PGRingBuffer *buff, PGByteP nb, long otail, long osize) {
+PG_ALWAYS_INLINE void defrag3(PGRingBuffer *buff, uint8_t *nb, long otail, long osize) {
     PGMemMove((nb + osize), nb, otail);
     buff->tail += osize;
 }
 
-PG_ALWAYS_INLINE void defrag2(PGRingBuffer *buff, PGByteP nb, long ohead, long nsize, long hsz) {
+PG_ALWAYS_INLINE void defrag2(PGRingBuffer *buff, uint8_t *nb, long ohead, long nsize, long hsz) {
     long nhead = (nsize - hsz);
     PGMemMove((nb + nhead), (nb + ohead), hsz);
     buff->head = nhead;
 }
 
-PG_ALWAYS_INLINE void defrag1(PGRingBuffer *buff, PGByteP nb, long ohead, long otail, long osize, long nsize, long hsz) {
+PG_ALWAYS_INLINE void defrag1(PGRingBuffer *buff, uint8_t *nb, long ohead, long otail, long osize, long nsize, long hsz) {
     if(hsz > otail) defrag3(buff, nb, otail, osize); // Defrag by moving the tail.
     else defrag2(buff, nb, ohead, nsize, hsz); // Defrag by moving the head.
 }
@@ -138,7 +145,7 @@ long PGSwapRingBufferEndian64AltAlt(PGRingBuffer *buff) {
 
 bool resizeBuffer(PGRingBuffer *buff, long needed, long osize, long ohead, long otail) {
     long    nsize = getNewBufferSize(buff, needed, osize);
-    PGByteP nb    = realloc(buff->buffer, (size_t)nsize);
+    uint8_t *nb    = realloc(buff->buffer, (size_t)nsize);
 
     if(nb) {
         buff->buffer = nb;
@@ -190,6 +197,21 @@ bool PGEnsureCapacity(PGRingBuffer *buff, long needed) {
     return (bool)(((needed > 0) && (PGRingBufferRemaining(buff) < needed)) ? resizeBuffer(buff, needed, buff->size, buff->head, buff->tail) : true);
 }
 
+bool PGAppendRingBufferToRingBuffer(PGRingBuffer *dest, const PGRingBuffer *src) {
+    if(src && (src->head != src->tail)) {
+        if(src->head < src->tail) {
+            return PGAppendToRingBuffer(dest, (src->buffer + src->head), (src->tail - src->head));
+        }
+        else {
+            if(PGAppendToRingBuffer(dest, (src->buffer + src->head), (src->size - src->head))) {
+                return PGAppendToRingBuffer(dest, src->buffer, src->tail);
+            }
+            return false;
+        }
+    }
+    return true;
+}
+
 bool PGAppendToRingBuffer(PGRingBuffer *buff, const void *src, long length) {
     if(src && length > 0) {
         if(PGEnsureCapacity(buff, length)) {
@@ -213,13 +235,28 @@ bool PGAppendToRingBuffer(PGRingBuffer *buff, const void *src, long length) {
     return true;
 }
 
-bool PGAppendByteToRingBuffer(PGRingBuffer *buff, PGByte byte) {
+bool PGAppendByteToRingBuffer(PGRingBuffer *buff, uint8_t byte) {
     if(PGEnsureCapacity(buff, 1)) {
         buff->buffer[buff->tail] = byte;
         pgIncTail(buff, 1);
         return true;
     }
     return false;
+}
+
+bool PGPrependRingBufferToRingBuffer(PGRingBuffer *dest, const PGRingBuffer *src) {
+    if(src && (src->head != src->tail)) {
+        if(src->head < src->tail) {
+            return PGPrependToRingBuffer(dest, (src->buffer + src->head), (src->tail - src->head));
+        }
+        else {
+            if(PGPrependToRingBuffer(dest, (src->buffer + src->head), (src->size - src->head))) {
+                return PGPrependToRingBuffer(dest, src->buffer, src->tail);
+            }
+            return false;
+        }
+    }
+    return true;
 }
 
 bool PGPrependToRingBuffer(PGRingBuffer *buff, const void *src, long length) {
@@ -243,7 +280,7 @@ bool PGPrependToRingBuffer(PGRingBuffer *buff, const void *src, long length) {
     return true;
 }
 
-bool PGPrependByteToRingBuffer(PGRingBuffer *buff, PGByte byte) {
+bool PGPrependByteToRingBuffer(PGRingBuffer *buff, uint8_t byte) {
     if(PGEnsureCapacity(buff, 1)) {
         buff->buffer[pgDecHead(buff, 1)] = byte;
         return true;
@@ -303,7 +340,7 @@ bool PGClearRingBuffer(PGRingBuffer *buff, bool keepCapacity) {
     buff->tail = 0;
 
     if(!keepCapacity) {
-        PGByteP b = realloc(buff->buffer, (size_t)buff->initSize);
+        uint8_t *b = realloc(buff->buffer, (size_t)buff->initSize);
         if(b) {
             buff->buffer = b;
             buff->size = buff->initSize;
@@ -350,3 +387,5 @@ void PGSwap64AltAlt(void *buffer, long length) {
 long PGHostByteOrder(void) { return __BYTE_ORDER__; }
 long PGLittleEndianByteOrder(void) { return __ORDER_LITTLE_ENDIAN__; }
 long PGBigEndianByteOrder(void) { return __ORDER_BIG_ENDIAN__; }
+
+#pragma clang diagnostic pop

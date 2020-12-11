@@ -6,6 +6,8 @@
 //  Copyright © 2020 Project Galen. All rights reserved.
 //
 
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "OCUnusedGlobalDeclarationInspection"
 #ifndef PGRingBuffer_h
 #define PGRingBuffer_h
 
@@ -19,15 +21,12 @@
 
 __BEGIN_DECLS
 
-typedef uint8_t PGByte;
-typedef PGByte  *PGByteP;
-
 typedef struct _st_pg_ringbuffer_ {
     long    initSize;
     long    size;
     long    head;
     long    tail;
-    PGByteP buffer;
+    uint8_t *buffer;
 }               PGRingBuffer;
 
 #define PG_EXPORT extern __attribute__((__visibility__("default")))
@@ -91,20 +90,38 @@ PG_EXPORT bool PGEnsureCapacity(PGRingBuffer *buff, long needed);
  * @param buff the buffer.
  * @param src the source bytes.
  * @param length the number of bytes to append.
- * @return the number of bytes appended. If less than length then there was not
- *         enough capacity and there was not enough memory to resize the buffer.
+ * @return `true` if successful or `false` if buffer size could not be expanded due to lack of memory.
  */
 PG_EXPORT bool PGAppendToRingBuffer(PGRingBuffer *buff, const void *src, long length);
+
+/**
+ * Appends the contents of the source ring buffer to the end of the destination ring buffer -
+ * resizing if needed.
+ *
+ * @param dest the destination ring buffer.
+ * @param src the source ring buffer.
+ * @return `true` if successful or `false` if buffer size could not be expanded due to lack of memory.
+ */
+PG_EXPORT bool PGAppendRingBufferToRingBuffer(PGRingBuffer *dest, const PGRingBuffer *src);
+
+/**
+ * Prepends the contents of the source ring buffer to the beginning of the destination ring buffer -
+ * resizing if needed.
+ *
+ * @param dest the destination ring buffer.
+ * @param src the source ring buffer.
+ * @return `true` if successful or `false` if buffer size could not be expanded due to lack of memory.
+ */
+PG_EXPORT bool PGPrependRingBufferToRingBuffer(PGRingBuffer *dest, const PGRingBuffer *src);
 
 /**
  * Append a single byte to the end of the ring buffer - resizing the buffer if needed.
  *
  * @param buff the buffer.
  * @param byte the byte.
- * @return `true` if successful or `false` if there was not
- *         enough capacity and there was not enough memory to resize the buffer.
+ * @return `true` if successful or `false` if buffer size could not be expanded due to lack of memory.
  */
-PG_EXPORT bool PGAppendByteToRingBuffer(PGRingBuffer *buff, PGByte byte);
+PG_EXPORT bool PGAppendByteToRingBuffer(PGRingBuffer *buff, uint8_t byte);
 
 /**
  * Prepends the given bytes to the beginning of the ring buffer - resizing the buffer if needed.
@@ -112,8 +129,7 @@ PG_EXPORT bool PGAppendByteToRingBuffer(PGRingBuffer *buff, PGByte byte);
  * @param buff the buffer.
  * @param src the source bytes.
  * @param length the number of bytes to prepend.
- * @return the number of bytes prepended. If less than length then there was not
- *         enough capacity and there was not enough memory to resize the buffer.
+ * @return `true` if successful or `false` if buffer size could not be expanded due to lack of memory.
  */
 PG_EXPORT bool PGPrependToRingBuffer(PGRingBuffer *buff, const void *src, long length);
 
@@ -122,10 +138,9 @@ PG_EXPORT bool PGPrependToRingBuffer(PGRingBuffer *buff, const void *src, long l
  *
  * @param buff the buffer.
  * @param byte the byte.
- * @return `true` if successful or `false` if there was not
- *         enough capacity and there was not enough memory to resize the buffer.
+ * @return `true` if successful or `false` if buffer size could not be expanded due to lack of memory.
  */
-PG_EXPORT bool PGPrependByteToRingBuffer(PGRingBuffer *buff, PGByte byte);
+PG_EXPORT bool PGPrependByteToRingBuffer(PGRingBuffer *buff, uint8_t byte);
 
 /**
  * Clears the buffer.
@@ -133,7 +148,7 @@ PG_EXPORT bool PGPrependByteToRingBuffer(PGRingBuffer *buff, PGByte byte);
  * @param buff the buffer.
  * @param keepCapacity if true then the capacity is maintained. If false then
  *                     the buffer is shrunk back to it's initial size.
- * @return true if successful, false if th buffer could not be resized.
+ * @return `true` if successful, `false` if th buffer could not be resized.
  */
 PG_EXPORT bool PGClearRingBuffer(PGRingBuffer *buff, bool keepCapacity);
 
@@ -370,3 +385,5 @@ PG_EXPORT long PGMemMove(void *dst, const void *src, long length);
 __END_DECLS
 
 #endif /* PGRingBuffer_h */
+
+#pragma clang diagnostic pop
