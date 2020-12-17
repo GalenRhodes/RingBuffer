@@ -62,7 +62,7 @@ PG_ALWAYS_INLINE long _PGSwapRingBufferEndian(PGRingBuffer *buff, long bytesPerW
 
     if(ws) {
         long    length = (ws * bytesPerWord);
-        uint8_t *words  = malloc((size_t)length);
+        uint8_t *words = malloc((size_t)length);
         PGReadFromRingBuffer(buff, words, length);
         func(words, length, alt);
         PGPrependToRingBuffer(buff, words, length);
@@ -99,24 +99,89 @@ PG_ALWAYS_INLINE long getNewBufferSize(const PGRingBuffer *buff, long needed, lo
     return nsize;
 }
 
-PG_ALWAYS_INLINE void defrag3(PGRingBuffer *buff, uint8_t *nb, long otail, long osize) {
-    PGMemMove((nb + osize), nb, otail);
-    buff->tail += osize;
+PG_ALWAYS_INLINE void defragBufferAfterResize(PGRingBuffer *buff, long nsize, long osize, long ohead, long otail) {
+    if(buff->tail < buff->head) {
+        long    hsz = (osize - ohead);
+        uint8_t *nb = buff->buffer;
+
+        if(hsz > otail) {
+            // Defrag by moving the tail.
+            PGMemMove((nb + osize), nb, otail);
+            buff->tail += osize;
+        }
+        else {
+            // Defrag by moving the head.
+            long nhead = (nsize - hsz);
+            PGMemMove((nb + nhead), (nb + ohead), hsz);
+            buff->head = nhead;
+        }
+    }
 }
 
-PG_ALWAYS_INLINE void defrag2(PGRingBuffer *buff, uint8_t *nb, long ohead, long nsize, long hsz) {
-    long nhead = (nsize - hsz);
-    PGMemMove((nb + nhead), (nb + ohead), hsz);
-    buff->head = nhead;
+bool PGDefragRingBuffer(PGRingBuffer *buff) {
+    long    h  = buff->head;
+    long    t  = buff->tail;
+    long    s  = buff->size;
+    uint8_t *b = buff->buffer;
+
+    if(t < h) {
+        long hs = (s - h);
+        long ts = t;
+
+        if(hs < ts) {
+            uint8_t *nb = malloc((size_t)hs);
+
+            if(nb) {
+                PGMemMove(nb, b + h, hs);
+                PGMemCpy(b + hs, b, ts);
+                PGMemMove(b, nb, hs);
+                buff->head = 0;
+                buff->tail = (hs + ts);
+                free(nb);
+            }
+            else {
+                return false;
+            }
+        }
+        else {
+            uint8_t *nb = malloc((size_t)ts);
+
+            if(nb) {
+                PGMemMove(nb, b, ts);
+                PGMemCpy(b, (b + h), hs);
+                PGMemMove((b + hs), nb, ts);
+                buff->head = 0;
+                buff->tail = (hs + ts);
+                free(nb);
+            }
+            else {
+                return false;
+            }
+        }
+    }
+    else if(h < t) {
+        if(h) {
+            long cc = (t - h);
+            PGMemCpy(b, (b + h), cc);
+            buff->head = 0;
+            buff->tail = cc;
+        }
+    }
+    else {
+        buff->head = buff->tail = 0;
+    }
+    return true;
 }
 
-PG_ALWAYS_INLINE void defrag1(PGRingBuffer *buff, uint8_t *nb, long ohead, long otail, long osize, long nsize, long hsz) {
-    if(hsz > otail) defrag3(buff, nb, otail, osize); // Defrag by moving the tail.
-    else defrag2(buff, nb, ohead, nsize, hsz); // Defrag by moving the head.
-}
-
-PG_ALWAYS_INLINE void defragBuffer(PGRingBuffer *buff, long nsize, long osize, long ohead, long otail) {
-    if((buff->tail < buff->head)) defrag1(buff, buff->buffer, ohead, otail, osize, nsize, (osize - ohead));
+uint8_t *PGGetRingBufferBuffer(PGRingBuffer *buff, long *size) {
+    if(PGDefragRingBuffer(buff)) {
+        *size = PGRingBufferCount(buff);
+        return buff->buffer;
+    }
+    else {
+        *size = 0;
+        return NULL;
+    }
 }
 
 long PGSwapRingBufferEndian16(PGRingBuffer *buff) {
@@ -145,12 +210,12 @@ long PGSwapRingBufferEndian64AltAlt(PGRingBuffer *buff) {
 
 bool resizeBuffer(PGRingBuffer *buff, long needed, long osize, long ohead, long otail) {
     long    nsize = getNewBufferSize(buff, needed, osize);
-    uint8_t *nb    = realloc(buff->buffer, (size_t)nsize);
+    uint8_t *nb   = realloc(buff->buffer, (size_t)nsize);
 
     if(nb) {
         buff->buffer = nb;
         buff->size   = nsize;
-        defragBuffer(buff, nsize, osize, ohead, otail);
+        defragBufferAfterResize(buff, nsize, osize, ohead, otail);
         return true;
     }
 
@@ -343,7 +408,7 @@ bool PGClearRingBuffer(PGRingBuffer *buff, bool keepCapacity) {
         uint8_t *b = realloc(buff->buffer, (size_t)buff->initSize);
         if(b) {
             buff->buffer = b;
-            buff->size = buff->initSize;
+            buff->size   = buff->initSize;
         }
         else return false;
     }
@@ -384,8 +449,16 @@ void PGSwap64AltAlt(void *buffer, long length) {
     _PGSwap64(buffer, length, 2);
 }
 
-long PGHostByteOrder(void) { return __BYTE_ORDER__; }
-long PGLittleEndianByteOrder(void) { return __ORDER_LITTLE_ENDIAN__; }
-long PGBigEndianByteOrder(void) { return __ORDER_BIG_ENDIAN__; }
+long PGHostByteOrder(void) {
+    return __BYTE_ORDER__;
+}
+
+long PGLittleEndianByteOrder(void) {
+    return __ORDER_LITTLE_ENDIAN__;
+}
+
+long PGBigEndianByteOrder(void) {
+    return __ORDER_BIG_ENDIAN__;
+}
 
 #pragma clang diagnostic pop

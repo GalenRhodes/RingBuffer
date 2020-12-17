@@ -23,10 +23,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f6c2b5c8-4de6-4191-8315-36f807849231" name="Default Changelist" comment="Hmmmmm.">
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Package.swift" beforeDir="false" afterPath="$PROJECT_DIR$/Package.swift" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Sources/RingBuffer/PGRingBuffer.c" beforeDir="false" afterPath="$PROJECT_DIR$/Sources/RingBuffer/PGRingBuffer.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Sources/RingBuffer/include/PGRingBuffer.h" beforeDir="false" afterPath="$PROJECT_DIR$/Sources/RingBuffer/include/PGRingBuffer.h" afterDir="false" />
     </list>
@@ -34,6 +31,11 @@
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ChangesViewManager">
+    <option name="groupingKeys">
+      <option value="directory" />
+    </option>
   </component>
   <component name="ExecutionTargetManager" SELECTED_TARGET="macos_macos_x86_64" />
   <component name="ExternalProjectsData">
@@ -115,7 +117,8 @@
       <workItem from="1604601328438" duration="663000" />
       <workItem from="1604609754882" duration="528000" />
       <workItem from="1607708455972" duration="295000" />
-      <workItem from="1607710435991" duration="1908000" />
+      <workItem from="1607710435991" duration="2074000" />
+      <workItem from="1608221795223" duration="2190000" />
     </task>
     <task id="LOCAL-00001" summary="Added Xcode Project Files">
       <created>1599747283708</created>
@@ -173,7 +176,14 @@
       <option name="project" value="LOCAL" />
       <updated>1603962624453</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="Hmmmmm.">
+      <created>1607712396271</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1607712396271</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -199,17 +209,5 @@
     <MESSAGE value="Byte order madness." />
     <MESSAGE value="Hmmmmm." />
     <option name="LAST_COMMIT_MESSAGE" value="Hmmmmm." />
-  </component>
-  <component name="WindowStateProjectService">
-    <state x="880" y="276" key="Vcs.Push.Dialog.v2" timestamp="1603962647977">
-      <screen x="0" y="0" width="2560" height="1080" />
-    </state>
-    <state x="578" y="268" key="Vcs.Push.Dialog.v2/0.0.1680.1050@0.0.1680.1050" timestamp="1600301358636" />
-    <state x="880" y="276" key="Vcs.Push.Dialog.v2/0.0.2560.1080@0.0.2560.1080" timestamp="1603962647977" />
-    <state x="832" y="265" width="1239" height="710" key="find.popup" timestamp="1600351847668">
-      <screen x="0" y="0" width="2560" height="1080" />
-    </state>
-    <state x="546" y="258" width="813" height="690" key="find.popup/0.0.1680.1050@0.0.1680.1050" timestamp="1600027988499" />
-    <state x="832" y="265" width="1239" height="710" key="find.popup/0.0.2560.1080@0.0.2560.1080" timestamp="1600351847668" />
   </component>
 </project>
