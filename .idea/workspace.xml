@@ -22,7 +22,9 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f6c2b5c8-4de6-4191-8315-36f807849231" name="Default Changelist" comment="Hmmmmm.">
+    <list default="true" id="f6c2b5c8-4de6-4191-8315-36f807849231" name="Default Changelist" comment="Added Defrag and get raw buffer.">
+      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/RingBuffer.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/RingBuffer.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Sources/RingBuffer/PGRingBuffer.c" beforeDir="false" afterPath="$PROJECT_DIR$/Sources/RingBuffer/PGRingBuffer.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Sources/RingBuffer/include/PGRingBuffer.h" beforeDir="false" afterPath="$PROJECT_DIR$/Sources/RingBuffer/include/PGRingBuffer.h" afterDir="false" />
@@ -68,8 +70,10 @@
     <property name="OBJC.PRESERVED_TARGET_SELECTION" value="RingBuffer" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="RunOnceActivity.cidr.known.project.marker" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="cidr.known.project.marker" value="true" />
     <property name="dart.analysis.tool.window.visible" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="node.js.detected.package.eslint" value="true" />
@@ -86,7 +90,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="RingBuffer" type="AppleRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="RingBuffer" TARGET_NAME="RingBuffer" CONFIG_NAME="Debug" SCHEME_NAME="RingBuffer" IS_LOCATION_SIMULATION_ALLOWED="true" APPLICATION_LANGUAGE="IDELaunchSchemeLanguageUseSystemLanguage" APPLICATION_REGION="" MAKE_ACTIVE="TRUE" SHOULD_DEBUG_EXTENSIONS="false">
+    <configuration name="RingBuffer" type="AppleRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="RingBuffer" TARGET_NAME="RingBuffer" CONFIG_NAME="Debug" SCHEME_NAME="RingBuffer" IS_LOCATION_SIMULATION_ALLOWED="true" APPLICATION_LANGUAGE="IDELaunchSchemeLanguageUseSystemLanguage" APPLICATION_REGION="" MAKE_ACTIVE="TRUE" SHOULD_DEBUG_EXTENSIONS="false">
       <EXTENSION ID="org.jetbrains.appcode.reveal.RevealRunConfigurationExtension">
         <REVEAL_SETTINGS autoInject="false" autoInstall="true" askToEnableAutoInstall="true" />
       </EXTENSION>
@@ -118,7 +122,10 @@
       <workItem from="1604609754882" duration="528000" />
       <workItem from="1607708455972" duration="295000" />
       <workItem from="1607710435991" duration="2074000" />
-      <workItem from="1608221795223" duration="2190000" />
+      <workItem from="1608221795223" duration="2262000" />
+      <workItem from="1608241683160" duration="31000" />
+      <workItem from="1608241732129" duration="53000" />
+      <workItem from="1619541677766" duration="881000" />
     </task>
     <task id="LOCAL-00001" summary="Added Xcode Project Files">
       <created>1599747283708</created>
@@ -183,7 +190,14 @@
       <option name="project" value="LOCAL" />
       <updated>1607712396271</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="Added Defrag and get raw buffer.">
+      <created>1608224025016</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1608224025016</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -208,6 +222,7 @@
     <MESSAGE value="Removed unnecessary typedef and macros." />
     <MESSAGE value="Byte order madness." />
     <MESSAGE value="Hmmmmm." />
-    <option name="LAST_COMMIT_MESSAGE" value="Hmmmmm." />
+    <MESSAGE value="Added Defrag and get raw buffer." />
+    <option name="LAST_COMMIT_MESSAGE" value="Added Defrag and get raw buffer." />
   </component>
 </project>

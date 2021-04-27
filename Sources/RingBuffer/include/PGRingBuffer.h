@@ -260,6 +260,15 @@ PG_EXPORT long PGSwapRingBufferEndian64AltAlt(PGRingBuffer *buff);
  */
 PG_EXPORT long PGRingBufferCapacity(const PGRingBuffer *buff);
 
+
+/**
+ * Effectively reads and forgets the next `length` bytes from the buffer. If the number of bytes in the buffer is less than or equal to `length` then the buffer will be empty after this operation.
+ *
+ * @param buff the buffer.
+ * @param length the number of bytes to consume from the buffer.
+ */
+PG_EXPORT void PGRingBufferConsume(PGRingBuffer *buff, long length);
+
 /**
  * Returns the number of bytes currently in the ring buffer ready to be read.
  *

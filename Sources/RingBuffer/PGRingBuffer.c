@@ -364,6 +364,16 @@ long PGRingBufferCapacity(const PGRingBuffer *buff) {
 }
 
 /**
+ * Effectively reads and forgets the next `length` bytes from the buffer. If the number of bytes in the buffer is less than or equal to `length` then the buffer will be empty after this operation.
+ *
+ * @param buff the buffer.
+ * @param length the number of bytes to consume from the buffer.
+ */
+void PGRingBufferConsume(PGRingBuffer *buff, long length) {
+    if(length > 0) { pgIncHead(buff, pg_Min(PGRingBufferCount(buff), length)); }
+}
+
+/**
  * The number of bytes in the buffer.
  *
  * @param buff the buffer.
