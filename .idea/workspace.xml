@@ -22,12 +22,9 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f6c2b5c8-4de6-4191-8315-36f807849231" name="Default Changelist" comment="Added Defrag and get raw buffer.">
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/RingBuffer.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/RingBuffer.iml" afterDir="false" />
+    <list default="true" id="f6c2b5c8-4de6-4191-8315-36f807849231" name="Default Changelist" comment="Added: void PGRingBufferConsume(PGRingBuffer *buff, long length)">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Sources/RingBuffer/PGRingBuffer.c" beforeDir="false" afterPath="$PROJECT_DIR$/Sources/RingBuffer/PGRingBuffer.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Sources/RingBuffer/include/PGRingBuffer.h" beforeDir="false" afterPath="$PROJECT_DIR$/Sources/RingBuffer/include/PGRingBuffer.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Package.swift" beforeDir="false" afterPath="$PROJECT_DIR$/Package.swift" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -53,6 +50,10 @@
       </GitPushTagMode>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/Sources/RingBuffer/include/PGRingBuffer.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Sources/RingBuffer/PGRingBuffer.c" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MacroExpansionManager">
     <option name="directoryName" value="sda8bf46" />
@@ -125,7 +126,8 @@
       <workItem from="1608221795223" duration="2262000" />
       <workItem from="1608241683160" duration="31000" />
       <workItem from="1608241732129" duration="53000" />
-      <workItem from="1619541677766" duration="881000" />
+      <workItem from="1619541677766" duration="1690000" />
+      <workItem from="1623328783446" duration="284000" />
     </task>
     <task id="LOCAL-00001" summary="Added Xcode Project Files">
       <created>1599747283708</created>
@@ -197,7 +199,14 @@
       <option name="project" value="LOCAL" />
       <updated>1608224025016</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="Added: void PGRingBufferConsume(PGRingBuffer *buff, long length)">
+      <created>1619542564058</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1619542564058</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -223,6 +232,7 @@
     <MESSAGE value="Byte order madness." />
     <MESSAGE value="Hmmmmm." />
     <MESSAGE value="Added Defrag and get raw buffer." />
-    <option name="LAST_COMMIT_MESSAGE" value="Added Defrag and get raw buffer." />
+    <MESSAGE value="Added: void PGRingBufferConsume(PGRingBuffer *buff, long length)" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added: void PGRingBufferConsume(PGRingBuffer *buff, long length)" />
   </component>
 </project>
