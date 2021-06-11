@@ -7,6 +7,6 @@ import PackageDescription
 let package = Package(
     name: "RingBuffer",
     platforms: [ .macOS(.v10_15), .tvOS(.v13), .iOS(.v13), .watchOS(.v6), ],
-    products: [ .library(name: "RingBuffer", type: .static, targets: [ "RingBuffer" ]) ],
+    products: [ .library(name: "RingBuffer", targets: [ "RingBuffer" ]) ],
     targets: [ .target(name: "RingBuffer") ]
 )
