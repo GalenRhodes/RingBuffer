@@ -24,7 +24,8 @@
   <component name="ChangeListManager">
     <list default="true" id="f6c2b5c8-4de6-4191-8315-36f807849231" name="Default Changelist" comment="Added: void PGRingBufferConsume(PGRingBuffer *buff, long length)">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Package.swift" beforeDir="false" afterPath="$PROJECT_DIR$/Package.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sources/RingBuffer/PGRingBuffer.c" beforeDir="false" afterPath="$PROJECT_DIR$/Sources/RingBuffer/PGRingBuffer.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sources/RingBuffer/include/PGRingBuffer.h" beforeDir="false" afterPath="$PROJECT_DIR$/Sources/RingBuffer/include/PGRingBuffer.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,7 +37,7 @@
       <option value="directory" />
     </option>
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="macos_macos_x86_64" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="macos_macos_arm64" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
@@ -129,6 +130,7 @@
       <workItem from="1619541677766" duration="1690000" />
       <workItem from="1623328783446" duration="370000" />
       <workItem from="1623427383148" duration="24000" />
+      <workItem from="1624196397384" duration="3585000" />
     </task>
     <task id="LOCAL-00001" summary="Added Xcode Project Files">
       <created>1599747283708</created>

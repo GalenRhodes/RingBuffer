@@ -76,7 +76,7 @@ PG_ALWAYS_INLINE long pg_Min(long x, long y) {
 }
 
 PG_ALWAYS_INLINE long pgIncHead(PGRingBuffer *buff, long length) {
-    return (buff->head = ((buff->head + length) % buff->size));
+    return ((length > 0) ? (buff->head = ((buff->head + length) % buff->size)) : buff->head);
 }
 
 PG_ALWAYS_INLINE long pgIncTail(PGRingBuffer *buff, long length) {
@@ -87,8 +87,12 @@ PG_ALWAYS_INLINE long pgDecHead(PGRingBuffer *buff, long length) {
     return (buff->head = (((buff->head < length) ? (buff->size + buff->head) : buff->head) - length));
 }
 
+PG_ALWAYS_INLINE long pgReadFrom(PGRingBuffer *buff, long start, uint8_t *dest, long length) {
+    return PGMemCpy(dest, (buff->buffer + start), length);
+}
+
 PG_ALWAYS_INLINE long pgRead(PGRingBuffer *buff, uint8_t *dest, long d) {
-    PGMemCpy(dest, (buff->buffer + buff->head), d);
+    pgReadFrom(buff, buff->head, dest, d);
     pgIncHead(buff, d);
     return d;
 }
@@ -252,6 +256,27 @@ long PGReadFromRingBuffer(PGRingBuffer *buff, void *dest, long maxLength) {
         }
         else {
             return pgRead(buff, dest, pg_Min(maxLength, (buff->tail - buff->head)));
+        }
+    }
+
+    return 0;
+}
+
+long PGReadLastFromRingBuffer(PGRingBuffer *buff, void *dest, long maxLength) {
+    if((dest != NULL) && (maxLength > 0) && (buff->head != buff->tail)) {
+        if(buff->head < buff->tail) {
+            long sz = pg_Min((buff->tail - buff->head), maxLength);
+            buff->tail = (buff->tail - sz);
+            return pgReadFrom(buff, buff->tail, dest, sz);
+        }
+        else {
+            long sz = pg_Min(buff->tail, maxLength);
+            long x  = (maxLength - pgReadFrom(buff, (buff->tail = 0), dest, sz));
+            if(x > 0) {
+                long sz2 = pg_Min((buff->size - buff->head), x);
+                return (sz + pgReadFrom(buff, (buff->tail = (buff->size - sz2)), (dest + sz), sz2));
+            }
+            return sz;
         }
     }
 

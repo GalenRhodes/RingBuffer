@@ -68,6 +68,18 @@ PG_EXPORT uint8_t *PGGetRingBufferBuffer(PGRingBuffer *buff, long *size);
 PG_EXPORT long PGReadFromRingBuffer(PGRingBuffer *buff, void *dest, long maxLength);
 
 /**
+ * Reads up to `maxLength` bytes from the END of the ring buffer into `dest`. If `maxLength` is more than the
+ * number of bytes in the ring buffer then those bytes will be read and the actual number of bytes
+ * read will be returned.
+ *
+ * @param buff the ring buffer.
+ * @param dest the destination buffer.
+ * @param maxLength the size of the destination buffer.
+ * @return the number of bytes actually read.
+ */
+PG_EXPORT long PGReadLastFromRingBuffer(PGRingBuffer *buff, void *dest, long maxLength);
+
+/**
  * Get bytes from the buffer without removing them.
  *
  * @param buff the buffer.
