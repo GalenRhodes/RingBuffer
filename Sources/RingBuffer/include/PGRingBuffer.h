@@ -90,6 +90,26 @@ PG_EXPORT long PGReadLastFromRingBuffer(PGRingBuffer *buff, void *dest, long max
 PG_EXPORT long PGPeekFromRingBuffer(PGRingBuffer *buff, void *dest, long maxLength);
 
 /**
+ * Get a single byte from the buffer. This does not change the buffer nor it's indexes. If the offset is greater than the number of bytes in the buffer then the resulting offset is
+ * the given offset MOD the number of bytes.  IE: (offset % count)
+ *
+ * @param buff The buffer.
+ * @param offset The offset from the starting index.
+ * @return A single byte from the buffer or zero if the buffer is empty.
+ */
+PG_EXPORT uint8_t PGGetByteFromRingBuffer(PGRingBuffer *buff, long offset);
+
+/**
+ * Set a single byte in the buffer to a new value. This does not change the buffer's indexes. If the buffer is empty then this function does nothing. If the offset is greater than
+ * the number of bytes in the buffer then the resulting offset is the given offset MOD the number of bytes.  IE: (offset % count)
+ *
+ * @param buff The buffer.
+ * @param index The offset from the starting index.
+ * @param byte The value to set at that index.
+ */
+PG_EXPORT void PGSetByteOnRingBuffer(PGRingBuffer *buff, long index, uint8_t byte);
+
+/**
  * Ensures that the ring buffer has enough capacity to accept the `needed` number of new bytes.
  * If there is not enough capacity then the size of the buffer is doubled until there is enough.
  *

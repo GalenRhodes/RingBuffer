@@ -273,7 +273,7 @@ long PGReadLastFromRingBuffer(PGRingBuffer *buff, void *dest, long maxLength) {
             long sz = pg_Min(buff->tail, maxLength);
             long x  = (maxLength - pgReadFrom(buff, (buff->tail = 0), dest, sz));
             if(x > 0) {
-                long sz2 = pg_Min((buff->size - buff->head), x);
+                long sz2                                  = pg_Min((buff->size - buff->head), x);
                 return (sz + pgReadFrom(buff, (buff->tail = (buff->size - sz2)), (dest + sz), sz2));
             }
             return sz;
@@ -435,6 +435,40 @@ long PGPeekFromRingBuffer(PGRingBuffer *buff, void *dest, long maxLength) {
     return cc;
 }
 
+/**
+ * Get a single byte from the buffer. This does not change the buffer nor it's indexes. If the offset is greater than the number of bytes in the buffer then the resulting offset is
+ * the given offset MOD the number of bytes.  IE: (offset % count)
+ *
+ * @param buff The buffer.
+ * @param offset The offset from the starting index.
+ * @return A single byte from the buffer or zero if the buffer is empty.
+ */
+uint8_t PGGetByteFromRingBuffer(PGRingBuffer *buff, long offset) {
+    long cc = PGRingBufferCount(buff);
+    return ((cc == 0) ? ((uint8_t)0) : buff->buffer[(cc == 1) ? buff->head : ((buff->head + offset) % buff->size)]);
+}
+
+/**
+ * Set a single byte in the buffer to a new value. This does not change the buffer's indexes. If the buffer is empty then this function does nothing. If the offset is greater than
+ * the number of bytes in the buffer then the resulting offset is the given offset MOD the number of bytes.  IE: (offset % count)
+ *
+ * @param buff The buffer.
+ * @param index The offset from the starting index.
+ * @param byte The value to set at that index.
+ */
+void PGSetByteOnRingBuffer(PGRingBuffer *buff, long index, uint8_t byte) {
+    long cc = PGRingBufferCount(buff);
+    if((cc > 0) && (index >= 0) && (index < cc)) buff->buffer[(cc == 1) ? (buff->head) : ((buff->head + index) % buff->size)] = byte;
+}
+
+/**
+ * Clears the buffer.
+ *
+ * @param buff the buffer.
+ * @param keepCapacity if true then the capacity is maintained. If false then
+ *                     the buffer is shrunk back to it's initial size.
+ * @return `true` if successful, `false` if th buffer could not be resized.
+ */
 bool PGClearRingBuffer(PGRingBuffer *buff, bool keepCapacity) {
     buff->head = 0;
     buff->tail = 0;
