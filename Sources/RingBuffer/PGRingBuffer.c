@@ -14,6 +14,14 @@
 
 typedef void (*PGFunc)(void *, long, int);
 
+#define RBCC(b)                (((b)->head <= (b)->tail) ? ((b)->tail - (b)->head) : (((b)->size - (b)->head) + (b)->tail))
+#define pg_Min(x, y)           (((x) < (y)) ? (x) : (y))
+#define pgIncHead(b, l)        ((l > 0) ? ((b)->head = (((b)->head + (l)) % (b)->size)) : (b)->head)
+#define pgIncTail(b, l)        ((b)->tail = (((b)->tail + (l)) % (b)->size))
+#define pgDecHead(b, l)        ((b)->head = ((((b)->head < (l)) ? ((b)->size + (b)->head) : (b)->head) - (l)))
+#define pgReadFrom(b, s, d, l) PGMemCpy((d), ((b)->buffer + (s)), (l))
+#define indexOf(b, o)          (((b)->head == (b)->tail) ? (-1) : (((b)->head < (b)->tail) ? (((b)->head + ((o) % RBCC((b))))) : (((b)->head + ((o) % RBCC((b)))) % (b)->size)))
+
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wunused-parameter"
 
@@ -31,6 +39,14 @@ void _PGSwap16(void *words, long length, int alt) {
 
 #pragma clang diagnostic pop
 
+PG_ALWAYS_INLINE uint64_t zaphod(uint64_t w, int i) {
+    switch(i) {
+        case 1: return (((w & 0xffffffff00000000) >> 32) | ((w & 0x00000000ffffffff) << 32));
+        case 2: return (((w & 0xffff000000000000) >> 48) | ((w & 0x0000ffff00000000) >> 16) | ((w & 0x00000000ffff0000) << 16) | ((w & 0x000000000000ffff) << 48));
+        default: return ((w >> 56) | ((w >> 40) & 0xff00) | ((w >> 24) & 0xff0000) | ((w >> 8) & 0xff000000) | ((w & 0xff000000) << 8) | ((w & 0xff0000) << 24) | ((w & 0xff00) << 40) | (w << 56));
+    }
+}
+
 void _PGSwap32(void *words, long length, int alt) {
     long ws = (length / 4);
     if(ws) {
@@ -42,14 +58,6 @@ void _PGSwap32(void *words, long length, int alt) {
     }
 }
 
-PG_ALWAYS_INLINE uint64_t zaphod(uint64_t w, int i) {
-    switch(i) {
-        case 1: return (((w & 0xffffffff00000000) >> 32) | ((w & 0x00000000ffffffff) << 32));
-        case 2: return (((w & 0xffff000000000000) >> 48) | ((w & 0x0000ffff00000000) >> 16) | ((w & 0x00000000ffff0000) << 16) | ((w & 0x000000000000ffff) << 48));
-        default: return ((w >> 56) | ((w >> 40) & 0xff00) | ((w >> 24) & 0xff0000) | ((w >> 8) & 0xff000000) | ((w & 0xff000000) << 8) | ((w & 0xff0000) << 24) | ((w & 0xff00) << 40) | (w << 56));
-    }
-}
-
 void _PGSwap64(void *buffer, long length, int alt) {
     uint64_t *words = buffer;
     long     ws     = (length / 8);
@@ -58,7 +66,7 @@ void _PGSwap64(void *buffer, long length, int alt) {
 }
 
 PG_ALWAYS_INLINE long _PGSwapRingBufferEndian(PGRingBuffer *buff, long bytesPerWord, PGFunc func, int alt) {
-    long ws = (PGRingBufferCount(buff) / bytesPerWord);
+    long ws = (RBCC(buff) / bytesPerWord);
 
     if(ws) {
         long    length = (ws * bytesPerWord);
@@ -71,26 +79,6 @@ PG_ALWAYS_INLINE long _PGSwapRingBufferEndian(PGRingBuffer *buff, long bytesPerW
     return ws;
 }
 
-PG_ALWAYS_INLINE long pg_Min(long x, long y) {
-    return ((x < y) ? x : y);
-}
-
-PG_ALWAYS_INLINE long pgIncHead(PGRingBuffer *buff, long length) {
-    return ((length > 0) ? (buff->head = ((buff->head + length) % buff->size)) : buff->head);
-}
-
-PG_ALWAYS_INLINE long pgIncTail(PGRingBuffer *buff, long length) {
-    return (buff->tail = ((buff->tail + length) % buff->size));
-}
-
-PG_ALWAYS_INLINE long pgDecHead(PGRingBuffer *buff, long length) {
-    return (buff->head = (((buff->head < length) ? (buff->size + buff->head) : buff->head) - length));
-}
-
-PG_ALWAYS_INLINE long pgReadFrom(PGRingBuffer *buff, long start, uint8_t *dest, long length) {
-    return PGMemCpy(dest, (buff->buffer + start), length);
-}
-
 PG_ALWAYS_INLINE long pgRead(PGRingBuffer *buff, uint8_t *dest, long d) {
     pgReadFrom(buff, buff->head, dest, d);
     pgIncHead(buff, d);
@@ -98,7 +86,7 @@ PG_ALWAYS_INLINE long pgRead(PGRingBuffer *buff, uint8_t *dest, long d) {
 }
 
 PG_ALWAYS_INLINE long getNewBufferSize(const PGRingBuffer *buff, long needed, long nsize) {
-    long c = (PGRingBufferCount(buff) + 1);
+    long c = (RBCC(buff) + 1);
     do { nsize *= 2; } while((nsize - c) < needed);
     return nsize;
 }
@@ -179,7 +167,7 @@ bool PGDefragRingBuffer(PGRingBuffer *buff) {
 
 uint8_t *PGGetRingBufferBuffer(PGRingBuffer *buff, long *size) {
     if(PGDefragRingBuffer(buff)) {
-        *size = PGRingBufferCount(buff);
+        *size = RBCC(buff);
         return buff->buffer;
     }
     else {
@@ -273,7 +261,7 @@ long PGReadLastFromRingBuffer(PGRingBuffer *buff, void *dest, long maxLength) {
             long sz = pg_Min(buff->tail, maxLength);
             long x  = (maxLength - pgReadFrom(buff, (buff->tail = 0), dest, sz));
             if(x > 0) {
-                long sz2                                  = pg_Min((buff->size - buff->head), x);
+                long sz2 = pg_Min((buff->size - buff->head), x);
                 return (sz + pgReadFrom(buff, (buff->tail = (buff->size - sz2)), (dest + sz), sz2));
             }
             return sz;
@@ -395,7 +383,7 @@ long PGRingBufferCapacity(const PGRingBuffer *buff) {
  * @param length the number of bytes to consume from the buffer.
  */
 void PGRingBufferConsume(PGRingBuffer *buff, long length) {
-    if(length > 0) { pgIncHead(buff, pg_Min(PGRingBufferCount(buff), length)); }
+    if(length > 0) { pgIncHead(buff, pg_Min(RBCC(buff), length)); }
 }
 
 /**
@@ -405,7 +393,7 @@ void PGRingBufferConsume(PGRingBuffer *buff, long length) {
  * @return the number of bytes in the buffer.
  */
 long PGRingBufferCount(const PGRingBuffer *buff) {
-    return ((buff->head <= buff->tail) ? (buff->tail - buff->head) : ((buff->size - buff->head) + buff->tail));
+    return RBCC(buff);
 }
 
 /**
@@ -415,7 +403,7 @@ long PGRingBufferCount(const PGRingBuffer *buff) {
  * @return the room remaining in the buffer.
  */
 long PGRingBufferRemaining(const PGRingBuffer *buff) {
-    return (PGRingBufferCapacity(buff) - PGRingBufferCount(buff));
+    return (PGRingBufferCapacity(buff) - RBCC(buff));
 }
 
 /**
@@ -444,8 +432,8 @@ long PGPeekFromRingBuffer(PGRingBuffer *buff, void *dest, long maxLength) {
  * @return A single byte from the buffer or zero if the buffer is empty.
  */
 uint8_t PGGetByteFromRingBuffer(PGRingBuffer *buff, long offset) {
-    long cc = PGRingBufferCount(buff);
-    return ((cc == 0) ? ((uint8_t)0) : buff->buffer[(cc == 1) ? buff->head : ((buff->head + offset) % buff->size)]);
+    long x = indexOf(buff, offset);
+    return ((x < 0) ? (uint8_t)0 : buff->buffer[x]);
 }
 
 /**
@@ -457,8 +445,8 @@ uint8_t PGGetByteFromRingBuffer(PGRingBuffer *buff, long offset) {
  * @param byte The value to set at that index.
  */
 void PGSetByteOnRingBuffer(PGRingBuffer *buff, long index, uint8_t byte) {
-    long cc = PGRingBufferCount(buff);
-    if((cc > 0) && (index >= 0) && (index < cc)) buff->buffer[(cc == 1) ? (buff->head) : ((buff->head + index) % buff->size)] = byte;
+    long x = indexOf(buff, index);
+    if(x >= 0) buff->buffer[x] = byte;
 }
 
 /**
